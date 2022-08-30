@@ -64,6 +64,7 @@ transfer_t fiber_exit( transfer_t t) noexcept {
     Rec * rec = static_cast< Rec * >( t.data);
     // destroy context stack
     rec->deallocate();
+    asm volatile("rdsspq  %r9");
     return { nullptr, nullptr };
 }
 
@@ -168,7 +169,10 @@ fcontext_t create_fiber1( StackAlloc && salloc, Fn && fn) {
     const fcontext_t fctx = make_fcontext( stack_top, size, & fiber_entry< Record >);
     BOOST_ASSERT( nullptr != fctx);
     // transfer control structure to context-stack
-    return jump_fcontext( fctx, record).fctx;
+    asm volatile("rdsspq  %r9");
+    transfer_t temp = jump_fcontext( fctx, record);
+    asm volatile("rdsspq  %r9");
+    return temp.fctx;
 }
 
 template< typename Record, typename StackAlloc, typename Fn >
