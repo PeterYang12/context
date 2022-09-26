@@ -372,5 +372,12 @@ Boost.Context headers if stack protection is enabled.
 
 [endsect]
 
+[section:shadow_stack Support for shadow stack protection]
+
+Shadow stack is part of Intel's Control-Flow Enforcement Technology. Users must
+define `BOOST_CONTEXT_SHADOW_STACK` before including any Boost.Context headers
+if shadow stack protection is enabled.
+
+[endsect]
 
 [endsect]
